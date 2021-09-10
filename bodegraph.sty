@@ -5,13 +5,12 @@
 % 2021/09/10 - Modified asymptotic phase plots to break a decade before
 % the natural frequency - Rushikesh Kamalapurkar
 \RequirePackage{tikz}
-\RequirePackage{etoolbox}
 \RequirePackage{ifsym}
 
 
 \usetikzlibrary{shapes,arrows,backgrounds,decorations.markings}
 
-%macros commande schéma-blocs
+%macros commande schÃ©ma-blocs
 
 \def\valpi{3.1415957}
 \def\valpas{10}
@@ -149,7 +148,7 @@
 \newcommand{\PIAmpAsymp}[2]{\IntAmp{1}+20*log10(#1/#2)-\POAmpAsymp{1}{#2}}
 \newcommand{\PIArgAsymp}[2]{\IntArg{1}+(\POArgAsymp{#1}{#2})*(-1)}
 
-%Correcteur PID série \PIDAmp K*(1+Ti*p)/(Ti*p)(1+Td*p)
+%Correcteur PID sÃ©rie \PIDAmp K*(1+Ti*p)/(Ti*p)(1+Td*p)
 \newcommand{\PIDAmp}[3]{\IntAmp{1}+20*log10(#1/#2)-\POAmp{1}{#2}-\POAmp{1}{#3}}
 \newcommand{\PIDArg}[3]{\IntArg{1}-\POArg{#1}{#2}-\POArg{1}{#3} }
 \newcommand{\PIDAmpAsymp}[3]{\IntAmp{1}+20*log10(#1/#2)-\POAmpAsymp{1}{#2}-\POAmpAsymp{1}{#3}}
@@ -173,7 +172,7 @@
 \newcommand{\RPAmpAsymp}[3]{\PDAmpAsymp{#1}{#2}+\POAmpAsymp{1}{(#3*#2)}}
 \newcommand{\RPArgAsymp}[3]{\PDArgAsymp{#1}{#2}+\POArgAsymp{1}{(#3*#2)}}
 
-%Premier ordre généralisé C(p)=K(a1+a2*p)/(b1+b2*p)
+%Premier ordre gÃ©nÃ©ralisÃ© C(p)=K(a1+a2*p)/(b1+b2*p)
 \newcommand{\POgAmp}[5]{\POAmp{(#1*#2/#4)}{(#5/#4)}-\POAmp{1}{(#3/#2)}}
 \newcommand{\POgArg}[5]{\POArg{(#1*#2/#4)}{(#5/#4)}-\POArg{1}{(#3/#2)}}
 \newcommand{\POgAmpAsymp}[5]{\POAmpAsymp{(#1*#2/#4)}{(#5/#4)}-\POAmpAsymp{1}{(#3/#2)}}
@@ -205,7 +204,7 @@
 
 
 \newcommand{\BodeGraph}{\@ifstar\BodeGraphText\BodeGraphNoText}
-%vielles définitions
+%vielles dÃ©finitions
 \newcommand{\BodeAmp}{\@ifstar\BodeGraphText\BodeGraphNoText}
 \newcommand{\BodeArg}{\@ifstar\BodeGraphText\BodeGraphNoText}
 
@@ -487,7 +486,7 @@ bounding box.north east);
 
 
 
-%============Abaque temps de réponse 2nd ordre==========
+%============Abaque temps de rÃ©ponse 2nd ordre==========
 
 \newcommand{\AbaqueTRsecond}{
 \begin{scope}[Abaque grid]
@@ -548,7 +547,7 @@ bounding box.north east);
 
 
 %========================= Courbes de Black================
-%les lignes ci dessous contiennent les commandes \ISOMxx et \ISOAxx appelées dans le tracé des courbes isomodules et isoargument 
+%les lignes ci dessous contiennent les commandes \ISOMxx et \ISOAxx appelÃ©es dans le tracÃ© des courbes isomodules et isoargument 
 
 %====Iso Module==============
 %\input{isom.txt}
