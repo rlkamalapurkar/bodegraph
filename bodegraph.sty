@@ -10,7 +10,7 @@
 
 \usetikzlibrary{shapes,arrows,backgrounds,decorations.markings}
 
-%macros commande schÃ©ma-blocs
+%macros commande schéma-blocs
 
 \def\valpi{3.1415957}
 \def\valpas{10}
@@ -35,7 +35,7 @@
 \tikzset{
     ref points/.style={circle,draw, black, opacity=0.7, 
     fill, minimum size= 2pt, inner sep=0},
-    gnuplot def/.style={samples=50,id=\arabic{idGnuplot},prefix=gnuplot/\jobname/},
+    gnuplot def/.style={id=\arabic{idGnuplot},prefix=gnuplot/\jobname/},
     Bode lines/.style={very thick, blue},
     Bode lines 2/.style={Bode lines, red},
     asymp lines/.style={Bode lines,thin},
@@ -116,22 +116,22 @@
 
 
 \newcommand{\KAmp}[1]{20*log10(abs(#1))}
-\newcommand{\KArg}[1]{0}
+\newcommand{\KArg}[1]{(#1<0?-180:0)}
 
 \newcommand{\POAmp}[2]{20*log10(abs(#1/sqrt(1+(#2*10**t)**2)))}
 
 \newcommand{\POAmpng}[2]{20*log10(abs(#1/sqrt(1+(#2*10^(\t))^2)))}
 
-\newcommand{\POAmpAsymp}[2]{(t<-log10(#2)?20*log10(#1):-20*t+20*log10(#1)-20*log10(#2))}
+\newcommand{\POAmpAsymp}[2]{(t<-log10(abs(#2))?20*log10(#1):-20*t+20*log10(#1)-20*log10(abs(#2)))}
 \newcommand{\POArg}[2]{-180/\valpi*atan(#2*10**t)}
-\newcommand{\POArgAsymp}[2]{(t<-1-log10(#2)?0:(t>=1-log10(#2)?-90:-45*t-45-45*log10(#2)))}
+\newcommand{\POArgAsymp}[2]{(#2>0?(t<-1-log10(#2)?0:(t>=1-log10(#2)?-90:-45*t-45-45*log10(#2))):(t<-1-log10(-#2)?0:(t>=1-log10(-#2)?90:45*t+45+45*log10(-#2))))}
 \newcommand{\POAmpReel}[2]{20*log10(abs(#1/sqrt(1+(#2*t)**2)))}
 \newcommand{\POArgReel}[2]{-180/\valpi*atan(#2*t)}
 
 \newcommand{\SOAmp}[3]{20*log10(abs(#1/sqrt((1-(10**t/#3)**2)**2+(2*#2*(10**t/#3))**2)))}
 \newcommand{\SOAmpAsymp}[3]{(t<log10(#3)?20*log10(#1):+20*log10(#1)+40*log10(#3)-40*t)}
 \newcommand{\SOArg}[3]{180/\valpi*(atan((#3**2-(10**t)**2)/(2*#2*#3*10**t))-\valpi/2)}
-\newcommand{\SOArgAsymp}[3]{(t<log10(#3)-#2?0:(t>=log10(#3)+#2?-180:-90*t/#2+(90/#2)*(log10(#3)-#2)))}
+\newcommand{\SOArgAsymp}[3]{(#2>0?(t<log10(#3)-#2?0:(t>=log10(#3)+#2?-180:-90*t/#2+(90/#2)*(log10(#3)-#2))):(t<log10(#3)+#2?-180:(t>=log10(#3)-#2?0:-90*t/#2-(90/#2)*(log10(#3)+#2))))}
 \newcommand{\SOAmpReel}[3]{20*log10(abs(#1/sqrt((1-(t/#3)**2)**2+(2*#2*(t/#3))**2)))}
 \newcommand{\SOArgReel}[3]{180/\valpi*(atan((#3**2-(t)**2)/(2*#2*#3*t))-\valpi/2)}
 
@@ -148,7 +148,7 @@
 \newcommand{\PIAmpAsymp}[2]{\IntAmp{1}+20*log10(#1/#2)-\POAmpAsymp{1}{#2}}
 \newcommand{\PIArgAsymp}[2]{\IntArg{1}+(\POArgAsymp{#1}{#2})*(-1)}
 
-%Correcteur PID sÃ©rie \PIDAmp K*(1+Ti*p)/(Ti*p)(1+Td*p)
+%Correcteur PID série \PIDAmp K*(1+Ti*p)/(Ti*p)(1+Td*p)
 \newcommand{\PIDAmp}[3]{\IntAmp{1}+20*log10(#1/#2)-\POAmp{1}{#2}-\POAmp{1}{#3}}
 \newcommand{\PIDArg}[3]{\IntArg{1}-\POArg{#1}{#2}-\POArg{1}{#3} }
 \newcommand{\PIDAmpAsymp}[3]{\IntAmp{1}+20*log10(#1/#2)-\POAmpAsymp{1}{#2}-\POAmpAsymp{1}{#3}}
@@ -172,7 +172,7 @@
 \newcommand{\RPAmpAsymp}[3]{\PDAmpAsymp{#1}{#2}+\POAmpAsymp{1}{(#3*#2)}}
 \newcommand{\RPArgAsymp}[3]{\PDArgAsymp{#1}{#2}+\POArgAsymp{1}{(#3*#2)}}
 
-%Premier ordre gÃ©nÃ©ralisÃ© C(p)=K(a1+a2*p)/(b1+b2*p)
+%Premier ordre généralisé C(p)=K(a1+a2*p)/(b1+b2*p)
 \newcommand{\POgAmp}[5]{\POAmp{(#1*#2/#4)}{(#5/#4)}-\POAmp{1}{(#3/#2)}}
 \newcommand{\POgArg}[5]{\POArg{(#1*#2/#4)}{(#5/#4)}-\POArg{1}{(#3/#2)}}
 \newcommand{\POgAmpAsymp}[5]{\POAmpAsymp{(#1*#2/#4)}{(#5/#4)}-\POAmpAsymp{1}{(#3/#2)}}
@@ -204,7 +204,7 @@
 
 
 \newcommand{\BodeGraph}{\@ifstar\BodeGraphText\BodeGraphNoText}
-%vielles dÃ©finitions
+%vielles définitions
 \newcommand{\BodeAmp}{\@ifstar\BodeGraphText\BodeGraphNoText}
 \newcommand{\BodeArg}{\@ifstar\BodeGraphText\BodeGraphNoText}
 
@@ -486,7 +486,7 @@ bounding box.north east);
 
 
 
-%============Abaque temps de rÃ©ponse 2nd ordre==========
+%============Abaque temps de réponse 2nd ordre==========
 
 \newcommand{\AbaqueTRsecond}{
 \begin{scope}[Abaque grid]
@@ -547,7 +547,7 @@ bounding box.north east);
 
 
 %========================= Courbes de Black================
-%les lignes ci dessous contiennent les commandes \ISOMxx et \ISOAxx appelÃ©es dans le tracÃ© des courbes isomodules et isoargument 
+%les lignes ci dessous contiennent les commandes \ISOMxx et \ISOAxx appelées dans le tracé des courbes isomodules et isoargument 
 
 %====Iso Module==============
 %\input{isom.txt}
