@@ -123,8 +123,8 @@
 \newcommand{\POAmpng}[2]{20*log10(abs(#1/sqrt(1+(#2*10^(\t))^2)))}
 
 \newcommand{\POAmpAsymp}[2]{(t<-log10(abs(#2))?20*log10(#1):-20*t+20*log10(#1)-20*log10(abs(#2)))}
-\newcommand{\POArg}[2]{-180/\valpi*atan(#2*10**t)}
-\newcommand{\POArgAsymp}[2]{(#2>0?(t<-1-log10(#2)?0:(t>=1-log10(#2)?-90:-45*t-45-45*log10(#2))):(t<-1-log10(-#2)?0:(t>=1-log10(-#2)?90:45*t+45+45*log10(-#2))))}
+\newcommand{\POArg}[2]{(#2>0?-180/\valpi*atan(#2*10**t):-180-180/\valpi*atan(#2*10**t))}
+\newcommand{\POArgAsymp}[2]{(#2>0?(t<-1-log10(#2)?0:(t>=1-log10(#2)?-90:-45*t-45-45*log10(#2))):(t<-1-log10(-#2)?-180:(t>=1-log10(-#2)?-90:45*t-135+45*log10(-#2))))}
 \newcommand{\POAmpReel}[2]{20*log10(abs(#1/sqrt(1+(#2*t)**2)))}
 \newcommand{\POArgReel}[2]{-180/\valpi*atan(#2*t)}
 
