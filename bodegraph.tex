@@ -55,7 +55,7 @@
 
 
 \begin{description}
-\item[version 1.5] 10/09/2021 : Bug fixes and implementation of more accurate asymptotic phase plots (by Rushikesh Kamalapurkar).
+\item[version 1.5] 10/17/2021 : Bug fixes and implementation of more accurate linear approximations phase plots (by Rushikesh Kamalapurkar).
 \item[version 1.4] 09/10/2010 : modification du répertoire par défaut des fichiers gnuplot.
 \item[version 1.3] 1/05/2010 : 
 \begin{itemize}
@@ -581,17 +581,19 @@ xscale=7/4,yscale=3/180]
 
 \subsubsection{Fonctions inverses}
 
-À partir des fonctions élémentaires ci dessus il est facile de tracer les fonctions inverses en changeant uniquement le signe.
+À partir des fonctions élémentaires ci dessus il est facile de tracer les fonctions inverses en changeant uniquement le signe. 
+
+EDIT *10/17/2021: Need to subtract from zero instead of just changing the sign (Rushikesh Kamalapurkar).
 \begin{description}
 \item [Premier ordre au numérateur : ] $N_1(s)=1+T\cdot s$  avec 
 \begin{itemize}
-\item \verb"\BodeGraph[Options]{domain}{-\POAmp{1}{T}}" pour le module,
-\item \verb"\BodeGraph[Options]{domain}{-\POArg{1}{T}}" pour la phase;
+\item \verb"\BodeGraph[Options]{domain}{0-\POAmp{1}{T}}" pour le module,
+\item \verb"\BodeGraph[Options]{domain}{0-\POArg{1}{T}}" pour la phase;
 \end{itemize}
 \item [Second ordre au numérateur : ]$N_2(s)=1+2\dfrac{2\cdot z}{\omega_n} cdot s +\dfrac{s^2}{\omega_n^2}$ avec 
 \begin{itemize}
-\item \verb"\BodeGraph[Options]{domain}{-\SOAmp{1}{z}{Wn}}" pour le module,
-\item \verb"\BodeGraph[Options]{domain}{-\SOArg{1}{z}{Wn}}" pour la phase;
+\item \verb"\BodeGraph[Options]{domain}{0-\SOAmp{1}{z}{Wn}}" pour le module,
+\item \verb"\BodeGraph[Options]{domain}{0-\SOArg{1}{z}{Wn}}" pour la phase;
 \end{itemize}
 
 \item [Dérivateur : ] $N_d(s)=s$ avec 
