@@ -2,11 +2,18 @@
 
 \NeedsTeXFormat{LaTeX2e}[1999/01/01]
 \ProvidesPackage{bodegraph}[2021/09/10]
+% 2021/10/15 - Restored original behavior for asymptotic plots and added option for linear approximation - Rushikesh Kamalapurkar
+% 2021/10/15 - Added support for unstable poles and zeros - Rushikesh Kamalapurkar
 % 2021/09/10 - Modified asymptotic phase plots to break a decade before
 % the natural frequency - Rushikesh Kamalapurkar
 \RequirePackage{tikz}
 \RequirePackage{ifsym}
 
+\newif\if@linarg\@linargfalse
+\DeclareOption{linear}{
+  \@linargtrue
+}
+\ProcessOptions\relax
 
 \usetikzlibrary{shapes,arrows,backgrounds,decorations.markings}
 
@@ -63,75 +70,88 @@
     Abaque lines/.style={thick, blue,smooth},
 }
 
-
 \newcommand{\semilog}{\@ifstar\semilogS\semilogNS}
 \newcommand{\semilogNS}[5][]{
-\pgfmathparse{int(#3-1)}\let\Xmax\pgfmathresult
-\foreach \ee in{#2,...,\Xmax}{
-    \foreach \x in {1,2,3,4,5,6,7,8,9}{
-\draw[semilog lines 2] ({log10(\x)+\ee},#4) -- ({log10(\x)+\ee},#5);}
-\draw[semilog lines] (\ee,#4)node[semilog label x]{$10^{\ee}$} -- ({\ee},#5);
-};
-\draw[semilog lines] ({#3},#4)node[semilog label x]{$10^{#3}$} -- ({#3},#5);
-\pgfmathparse{int(#4+\valpas)}
-\let\Valsuivante\pgfmathresult 
-\foreach \yy in  {#4,\Valsuivante,...,#5}{
-\draw[semilog lines] (#2,\yy) node[semilog label y,left]{$\yy$} -- ({#3},\yy);};
-\node[semilog label y, node distance=0.3em]at (#2,#5) { \Unity};
-\node[semilog label x, right,node distance=0.8em]at (#3,#4){ \Unitx};
-\def\Unitx{}
-\def\Unity{}
+    \pgfmathparse{int(#3-1)}\let\Xmax\pgfmathresult
+    \foreach \ee in{#2,...,\Xmax}{
+        \foreach \x in {1,2,3,4,5,6,7,8,9}{
+        \draw[semilog lines 2] ({log10(\x)+\ee},#4) -- ({log10(\x)+\ee},#5);}
+        \draw[semilog lines] (\ee,#4)node[semilog label x]{$10^{\ee}$} -- ({\ee},#5);
+    };
+    \draw[semilog lines] ({#3},#4)node[semilog label x]{$10^{#3}$} -- ({#3},#5);
+    \pgfmathparse{int(#4+\valpas)}
+    \let\Valsuivante\pgfmathresult 
+    \foreach \yy in  {#4,\Valsuivante,...,#5}{
+        \draw[semilog lines] (#2,\yy) node[semilog label y,left]{$\yy$} -- ({#3},\yy);
+    };
+    \node[semilog label y, node distance=0.3em]at (#2,#5) { \Unity};
+    \node[semilog label x, right,node distance=0.8em]at (#3,#4){ \Unitx};
+    \def\Unitx{}
+    \def\Unity{}
 }
 \newcommand{\semilogS}[5][]{
-\semilog[#1]{#2}{#3}{#4}{#5}
-\pgfmathparse{int(#3-1)}\let\Xmax\pgfmathresult
-\foreach \ee in{#2,...,\Xmax}{
-    \foreach \x in {1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5}{
-\draw[semilog half lines] ({log10(\x)+\ee},#4) -- ({log10(\x)+\ee},#5);}
-};
+    \semilog[#1]{#2}{#3}{#4}{#5}
+    \pgfmathparse{int(#3-1)}\let\Xmax\pgfmathresult
+    \foreach \ee in{#2,...,\Xmax}{
+        \foreach \x in {1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5}{
+            \draw[semilog half lines] ({log10(\x)+\ee},#4) -- ({log10(\x)+\ee},#5);}
+    };
 }
-
 
 \newcommand{\semilogNG}[2]{
-\pgfmathparse{int(#1-1)}\let\Xmax\pgfmathresult
-\foreach \ee in{0,...,\Xmax}{
-    \foreach \x in {1,2,3,4,5,6,7,8,9}{
-\draw[semilog lines 2] ({log10(\x)+\ee},0) -- ({log10(\x)+\ee},#2);}
-};
-\draw[semilog lines] ({#1},0) -- ({#1},#2);
-\pgfmathparse{int(0+\valpas)}
-\let\Valsuivante\pgfmathresult 
-\foreach \yy in  {0,\Valsuivante,...,#2}{
-\draw[semilog lines] (0,\yy) -- ({#1},\yy);};
-\node[semilog label y, node distance=0.3em]at (0,#2) {\tiny \Unity};
-\node[semilog label x, right,node distance=0.8em]at (#1,0){\tiny \Unitx};
-\def\Unitx{}
-\def\Unity{}
-\pgfmathparse{int(#1-1)}\let\Xmax\pgfmathresult
-\foreach \ee in{0,...,\Xmax}{
-    \foreach \x in {1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5}{
-\draw[semilog half lines] ({log10(\x)+\ee},0) -- ({log10(\x)+\ee},#2);}
-};
+    \pgfmathparse{int(#1-1)}\let\Xmax\pgfmathresult
+    \foreach \ee in{0,...,\Xmax}{
+        \foreach \x in {1,2,3,4,5,6,7,8,9}{
+            \draw[semilog lines 2] ({log10(\x)+\ee},0) -- ({log10(\x)+\ee},#2);}
+    };
+    \draw[semilog lines] ({#1},0) -- ({#1},#2);
+    \pgfmathparse{int(0+\valpas)}
+    \let\Valsuivante\pgfmathresult 
+    \foreach \yy in  {0,\Valsuivante,...,#2}{
+        \draw[semilog lines] (0,\yy) -- ({#1},\yy);
+    };
+    \node[semilog label y, node distance=0.3em]at (0,#2) {\tiny \Unity};
+    \node[semilog label x, right,node distance=0.8em]at (#1,0){\tiny \Unitx};
+    \def\Unitx{}
+    \def\Unity{}
+    \pgfmathparse{int(#1-1)}\let\Xmax\pgfmathresult
+    \foreach \ee in{0,...,\Xmax}{
+        \foreach \x in {1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5}{
+            \draw[semilog half lines] ({log10(\x)+\ee},0) -- ({log10(\x)+\ee},#2);
+        }
+    };
 }
 
-
+% Constant
 \newcommand{\KAmp}[1]{20*log10(abs(#1))}
+
 \newcommand{\KArg}[1]{(#1<0?-180:0)}
 
+% First order
 \newcommand{\POAmp}[2]{20*log10(abs(#1/sqrt(1+(#2*10**t)**2)))}
-
 \newcommand{\POAmpng}[2]{20*log10(abs(#1/sqrt(1+(#2*10^(\t))^2)))}
-
 \newcommand{\POAmpAsymp}[2]{(t<-log10(abs(#2))?20*log10(#1):-20*t+20*log10(#1)-20*log10(abs(#2)))}
+
 \newcommand{\POArg}[2]{(#2>0?-180/\valpi*atan(#2*10**t):-180-180/\valpi*atan(#2*10**t))}
-\newcommand{\POArgAsymp}[2]{(#2>0?(t<-1-log10(#2)?0:(t>=1-log10(#2)?-90:-45*t-45-45*log10(#2))):(t<-1-log10(-#2)?-180:(t>=1-log10(-#2)?-90:45*t-135+45*log10(-#2))))}
+\if@linarg
+    \newcommand{\POArgAsymp}[2]{(#2>0?(t<-1-log10(#2)?0:(t>=1-log10(#2)?-90:-45*t-45-45*log10(#2))):(t<-1-log10(-#2)?-180:(t>=1-log10(-#2)?-90:45*t-135+45*log10(-#2))))}
+\else
+    \newcommand{\POArgAsymp}[2]{(#2>0?(t<log10(1/(#2))?0:-90):(t<log10(1/(-#2))?-180:-90))}
+\fi
+
 \newcommand{\POAmpReel}[2]{20*log10(abs(#1/sqrt(1+(#2*t)**2)))}
 \newcommand{\POArgReel}[2]{-180/\valpi*atan(#2*t)}
 
+% Second order 
 \newcommand{\SOAmp}[3]{20*log10(abs(#1/sqrt((1-(10**t/#3)**2)**2+(2*#2*(10**t/#3))**2)))}
 \newcommand{\SOAmpAsymp}[3]{(t<log10(#3)?20*log10(#1):+20*log10(#1)+40*log10(#3)-40*t)}
-\newcommand{\SOArg}[3]{180/\valpi*(atan((#3**2-(10**t)**2)/(2*#2*#3*10**t))-\valpi/2)}
-\newcommand{\SOArgAsymp}[3]{(#2>0?(t<log10(#3)-#2?0:(t>=log10(#3)+#2?-180:-90*t/#2+(90/#2)*(log10(#3)-#2))):(t<log10(#3)+#2?-180:(t>=log10(#3)-#2?0:-90*t/#2-(90/#2)*(log10(#3)+#2))))}
+
+\newcommand{\SOArg}[3]{180/\valpi*(atan((#3**2-(10**t)**2)/(2*#2*#3*10**t))+(#2>0?-\valpi/2:\valpi/2))}
+\if@linarg
+    \newcommand{\SOArgAsymp}[3]{(#2>0?(t<log10(#3)-#2?0:(t>=log10(#3)+#2?-180:-90*t/#2+(90/#2)*(log10(#3)-#2))):(t<log10(#3)+#2?0:(t>=log10(#3)-#2?180:180-90*t/#2-(90/#2)*(log10(#3)+#2))))}
+\else
+    \newcommand{\SOArgAsymp}[3]{(#2>0? (t<log10(#3)? 0: -180): (t<log10(#3)? 0: 180))}
+\fi
 \newcommand{\SOAmpReel}[3]{20*log10(abs(#1/sqrt((1-(t/#3)**2)**2+(2*#2*(t/#3))**2)))}
 \newcommand{\SOArgReel}[3]{180/\valpi*(atan((#3**2-(t)**2)/(2*#2*#3*t))-\valpi/2)}
 
