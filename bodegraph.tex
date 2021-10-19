@@ -55,7 +55,7 @@
 
 
 \begin{description}
-\item[version 1.5] 10/17/2021 : Bug fixes and implementation of more accurate linear approximations phase plots (by Rushikesh Kamalapurkar).
+\item[version 1.5] 10/17/2021 : Bug fixes and implementation of a \verb"linear" package option to plot more accurate linear approximation of phase plots (by Rushikesh Kamalapurkar).
 \item[version 1.4] 09/10/2010 : modification du répertoire par défaut des fichiers gnuplot.
 \item[version 1.3] 1/05/2010 : 
 \begin{itemize}
@@ -369,9 +369,9 @@ Deux commandes implémentent les formules permettant le tracé des diagrammes d'am
 
 \begin{itemize}
 \item \verb"\POAmp{K}{tau}"  pour le diagramme d'amplitude, avec \verb"K" le gain \verb"tau" la constante de temps;
-\item \verb"\POAmpAsymp{K}{tau}"  pour le diagramme asymptotique d'amplitude;
+\item \verb"\POAmpAsymp{K}{tau}"  pour le diagramme asymptotique d'amplitude; 
 \item \verb"\POArg{K}{tau}"  pour le diagramme de phase; 
-\item \verb"\POArgAsymp{K}{tau}"  pour le diagramme  asymptotique de phase.
+\item \verb"\POArgAsymp{K}{tau}"  pour le diagramme  asymptotique de phase.  UPDATE: With the package option \verb"linear", this command and all the following \verb"Asymp" commands produce linear approximation of phase plots instead of plotting just the asymptotes.
 \end{itemize}
 
 Remarque : la donnée, \verb"{K}" n'est pas utile pour tracer le diagramme de phase, il est juste maintenu pour faciliter l'écriture de la fonction par copie directe de la commande de tracer du module.
