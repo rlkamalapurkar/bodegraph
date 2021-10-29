@@ -55,7 +55,25 @@
 
 
 \begin{description}
-\item[version 1.5] 10/17/2021 : Bug fixes and implementation of a \verb"linear" package option to plot more accurate linear approximation of phase plots (by Rushikesh Kamalapurkar).
+\item[version 1.5] 10/17/2021 : Bug fixes and improvements: implementation of a \verb"linear" package option to plot more accurate linear approximation of phase plots - Rushikesh Kamalapurkar.
+\begin{itemize}
+	\item Fixed a bug where `\POAmpAsymp{a}{b}` generates a blank plot for b >= 2.
+	\item Added support for asymptotic Bode plots of real poles and zeros in the right half plane.
+	\item Added support for asymptotic Bode plots of complex conjugate pairs of poles and zeros with negative ?.
+	\item When loaded using the option `linear`:
+	\begin{itemize}
+	\item \verb`\POArgAsymp` changes slopes a decade before and after a pole/zero.
+	\item \verb`\SOArgAsymp` changes slopes at $\omega_n/10^{\zeta}$ and $\omega_n  10^{\zeta}$.
+	\end{itemize}
+	\item Due to a bug in \verb`gnuplot` (fixed in 5.4 patchlevel 3), using a negative sign \verb`-\POArgAsymp` and \verb`-\SOArgAsymp`, to plot zeros does not work unless they are subtracted from something. 
+	
+	For example, \verb`\POArgAsymp{1}{1} - \POArgAsymp{10}{10}` is OK, 
+	
+	and so is \verb`0 - \POArgAsymp{10}{10}+\POArgAsymp{1}{1}`. 
+	
+	But, \verb`-\POArgAsymp{10}{10} + \POArgAsymp{1}{1}` does not work.*
+	\item Call \verb`\BodeGraph` with the option `samples=300` (or more, as needed) to get accurate asymptotic phase plots.*
+\end{itemize}
 \item[version 1.4] 09/10/2010 : modification du répertoire par défaut des fichiers gnuplot.
 \item[version 1.3] 1/05/2010 : 
 \begin{itemize}
